@@ -1,175 +1,214 @@
-UART-Based Temperature Sensor Logger and Visualizer
-A complete embedded system solution for temperature monitoring using Arduino and Python. This project demonstrates real-time data acquisition, UART communication, and live visualization with robust error handling and data logging capabilities.
-🌡️ Features
-Embedded System (Arduino)
+# 🌡️ UART-Based Temperature Sensor Logger and Visualizer
 
-Temperature Simulation: Realistic temperature data generation using sine waves and random noise
-UART Communication: Structured data packets with checksum verification
-Static Memory Management: Safe buffer handling for microcontroller environments
-Error Detection: Checksum-based data integrity verification
-Visual Feedback: LED indicators for transmission status
-Command Processing: Basic command interface for system control
+A complete embedded system for **real-time temperature monitoring** using **Arduino + Python**. This project showcases live data acquisition, UART communication, and real-time plotting with robust error handling and data logging.
 
-Host System (Python)
+---
 
-Real-time Visualization: Live matplotlib plotting with temperature trends
-Data Logging: CSV file output with timestamps and statistics
-Circular Buffer: Efficient memory usage for continuous data streams
-Auto Port Detection: Automatic Arduino detection and connection
-Multi-threading: Separate threads for data collection and visualization
-Comprehensive Error Handling: Robust recovery from communication errors
+## 🔧 Key Features
 
-🚀 Quick Start
-Prerequisites
+### 🛠 Embedded System (Arduino)
 
-Arduino IDE
-Python 3.7+
-Arduino Uno/Nano or compatible board
-USB cable for UART communication
+* **Simulated Temperature Generation**: Realistic sensor behavior using sine waves and noise.
+* **UART Communication**: Structured packet format with checksum verification.
+* **Memory-Safe Buffering**: Static buffer for safe data transmission.
+* **Error Detection**: Checksums ensure data integrity.
+* **LED Indicators**: Visual status feedback on data transmission.
+* **Command Support**: Basic serial command interface for manual control.
 
-Installation
+### 🖥 Host System (Python)
 
-Clone the repository
-bashgit clone <repository-url>
+* **Live Visualization**: Real-time temperature plotting using `matplotlib`.
+* **Data Logging**: CSV file generation with timestamped data.
+* **Circular Buffer**: Efficient memory use for continuous streams.
+* **Auto Port Detection**: Automatically connects to Arduino.
+* **Multi-threaded**: Separate threads for data reading and plotting.
+* **Robust Error Handling**: Recovers from common UART issues gracefully.
+
+---
+
+## 🚀 Quick Start
+
+### 📦 Prerequisites
+
+* Arduino IDE
+* Python 3.7+
+* Arduino Uno/Nano
+* USB cable
+
+### 🔌 Installation
+
+```bash
+git clone <repository-url>
 cd uart-temperature-logger
+pip install -r requirements.txt
+```
 
-Install Python dependencies
-bashpip install -r requirements.txt
+### 🔄 Upload Arduino Code
 
-Upload Arduino code
+1. Open `embedded/arduino_temp_sensor.ino` in Arduino IDE
+2. Select your board and port
+3. Upload the sketch
 
-Open embedded/arduino_temp_sensor.ino in Arduino IDE
-Select your board and port
-Upload the code
+### 📈 Run the Python Logger
 
-
-Run the Python visualizer
-bashcd host
+```bash
+cd host
 python uart_logger.py
+```
 
+---
 
-📁 Project Structure
+## 📁 Project Structure
+
+```
 uart-temperature-logger/
 ├── embedded/
-│   └── arduino_temp_sensor.ino    # Arduino temperature sensor code
+│   └── sensor.ino     # Arduino temperature simulation code
 ├── host/
-│   └── uart_logger.py             # Python data logger and visualizer
+│   ├── uart_logger.py                  
+│   ├── uart_protocol.py                 
+│   └── visuliser.py
 ├── docs/
-│   ├── README.md                  # This file
-│   ├── protocol.md                # UART protocol specification
-│   └── api.md                     # API documentation
+│   ├── README.md                   # Project documentation
+│   ├── protocol.md                 # UART packet structure
+│   └── api.md                      # Command line interface doc
+```
 
-🔧 Usage
-Basic Usage
-bash# Run with default settings
+---
+
+## ⚙️ Usage
+
+### 🧪 Basic Run
+
+```bash
 python uart_logger.py
+```
 
-# Specify custom port and baud rate
-python uart_logger.py --port COM3 --baud 115200
+### 🔧 Custom Configuration
 
-# Set custom buffer size and update interval
-python uart_logger.py --buffer-size 200 --update-interval 0.1
+```bash
+python uart_logger.py --port COM3 --baud 115200 --buffer-size 200 --update-interval 0.1 --debug
+```
 
-# Enable debug mode
-python uart_logger.py --debug
-Command Line Options
+### 📋 Command Line Options
 
---port: Serial port (auto-detected if not specified)
---baud: Baud rate (default: 9600)
---buffer-size: Circular buffer size (default: 100)
---update-interval: Plot update interval in seconds (default: 0.5)
---log-file: Custom log file path
---debug: Enable debug output
+* `--port`: Serial port (auto-detected if not specified)
+* `--baud`: Baud rate (default: 9600)
+* `--buffer-size`: Circular buffer size (default: 100)
+* `--update-interval`: Plot refresh interval (default: 0.5s)
+* `--log-file`: Custom output CSV path
+* `--debug`: Verbose debug logging
 
-📊 Data Output
-CSV Log Format
-The system generates CSV files with the following columns:
+---
 
-timestamp: Unix timestamp
-datetime: Human-readable date/time
-sensor_id: Sensor identifier
-sequence: Packet sequence number
-temperature: Temperature value in Celsius
-checksum_valid: Data integrity status
+## 📊 Output Format
 
-Real-time Statistics
+### 🗃 CSV Columns
 
-Current temperature
-Average temperature
-Min/Max values
-Data reception rate
-Error statistics
+* `timestamp`: Unix time
+* `datetime`: ISO 8601 format
+* `sensor_id`: ID or label
+* `sequence`: Packet sequence number
+* `temperature`: Celsius reading
+* `checksum_valid`: Boolean
 
-🛠️ Hardware Setup
-Arduino Connections
+### 📈 Live Stats
 
-LED (optional): Pin 13 (built-in LED used for status indication)
-UART: USB connection for data transmission
-Power: USB or external 5V supply
+* Current temperature
+* Min/Max/Avg
+* Data rate (samples/sec)
+* Error count and loss rate
 
-Wiring Diagram
+---
+
+## 🔌 Hardware Setup
+
+### 🧰 Connections
+
+* LED: Pin 13 (on-board)
+* UART: USB (TX/RX over serial)
+* Power: USB or external 5V
+
+### 🖼️ Wiring Diagram
+
+```
 Arduino Uno
-├── Digital Pin 13 → Built-in LED (Status indicator)
-├── USB Port → PC (UART communication)
-└── Power → USB or External 5V
-📈 Performance
+├── Pin 13         → Built-in LED
+├── USB Port       → PC (UART Comm)
+└── 5V             → Power
+```
 
-Data Rate: 1 sample every 5 seconds
-Buffer Capacity: Configurable circular buffer (default: 100 samples)
-Memory Usage: ~2KB RAM on Arduino
-Communication: 9600 baud UART (configurable)
-Latency: <100ms end-to-end
+---
 
-🔍 Troubleshooting
-Common Issues
+## ⚙️ Performance
 
-Arduino not detected
+* **Data Rate**: 1 sample every 5 seconds
+* **Buffer Size**: 100 samples (configurable)
+* **RAM Usage**: \~2KB on Arduino
+* **Baud Rate**: 9600 (adjustable)
+* **Latency**: <100ms round trip
 
-Check USB connection
-Verify driver installation
-Try different USB port
+---
 
+## 🧪 Troubleshooting
 
-Data corruption
+### 🛑 Arduino Not Detected
 
-Check baud rate settings
-Verify cable quality
-Reduce transmission frequency
+* Check USB cable and port
+* Reinstall drivers if needed
 
+### 🛠 Data Corruption
 
-Python dependencies
+* Ensure baud rates match
+* Use quality USB cables
+* Lower transmission frequency if needed
 
-Update pip: pip install --upgrade pip
-Install in virtual environment
-Check Python version compatibility
+### 🐍 Python Issues
 
+* Use virtual environments
+* Upgrade pip and reinstall packages
+* Confirm Python 3.7+ is used
 
+### 🔍 Debug Mode
 
-Debug Mode
-Enable debug mode for detailed logging:
-bashpython uart_logger.py --debug
-🤝 Contributing
+```bash
+python uart_logger.py --debug
+```
 
-Fork the repository
-Create a feature branch (git checkout -b feature/new-feature)
-Commit changes (git commit -am 'Add new feature')
-Push to branch (git push origin feature/new-feature)
-Create Pull Request
+---
 
-📄 License
-This project is licensed under the MIT License - see the LICENSE file for details.
-👥 Authors
+## 🤝 Contributing
 
-Sarversh -   GitHub username- Sarvesh2783
+1. Fork the repo
+2. Create a branch: `git checkout -b feature/my-feature`
+3. Commit: `git commit -m "Add feature"`
+4. Push: `git push origin feature/my-feature`
+5. Open a Pull Request 🚀
 
-🙏 Acknowledgments
+---
 
-Arduino community for excellent documentation
-PySerial developers for robust serial communication
-Matplotlib team for powerful visualization tools
+## 📄 License
 
-📚 References
+MIT License – see `LICENSE` file for details.
 
-Arduino UART Documentation
-PySerial Documentation
-Matplotlib Documentation
+---
+
+## 👨‍💻 Author
+
+**Sarvesh** – [GitHub: Sarvesh2783](https://github.com/Sarvesh2783)
+
+---
+
+## 🙏 Acknowledgments
+
+* Arduino community
+* PySerial developers
+* Matplotlib team
+
+---
+
+## 📚 References
+
+* [Arduino UART Docs](https://www.arduino.cc/en/Serial/Begin)
+* [PySerial Docs](https://pythonhosted.org/pyserial/)
+* [Matplotlib Docs](https://matplotlib.org/stable/index.html)
